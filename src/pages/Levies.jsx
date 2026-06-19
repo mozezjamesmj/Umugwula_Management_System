@@ -18,10 +18,16 @@ function Levies({ members, levies, setLevies, ismobile }) {
   const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(""), 3000); };
 
   const monthOptions = [];
-  for (let i = 0; i < 12; i++) {
-    const d = new Date(); d.setMonth(d.getMonth() + i);
-    const val = d.toISOString().slice(0,7);
+  const startYear = 2025;
+  const startMonth = 0; // January
+  const endDate = new Date();
+  endDate.setMonth(endDate.getMonth() + 12); // allow up to 12 months ahead
+  let cursor = new Date(startYear, startMonth, 1);
+
+  while (cursor <= endDate) {
+    const val = cursor.toISOString().slice(0,7);
     monthOptions.push({ value: val, label: monthLabel(val) });
+    cursor.setMonth(cursor.getMonth() + 1);
   }
 
  const save = async () => {
