@@ -80,6 +80,28 @@ const femaleLevyTotal = levies
           ))}
         </div>
       </div>
+
+      <div style={{ marginTop: 24, background: COLORS.white, borderRadius: 16, padding: 24, boxShadow: "0 2px 16px rgba(0,0,0,.06)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 18, flexWrap: "wrap" }}>
+          <h3 style={{ margin: 0, fontSize: 15, color: COLORS.ink }}>Registered Members</h3>
+          <div style={{ fontSize: 13, color: COLORS.muted }}>{members.length} total member{members.length !== 1 ? "s" : ""}</div>
+        </div>
+        {members.length === 0 ? (
+          <div style={{ color: COLORS.muted, fontSize: 14 }}>No registered members yet.</div>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "repeat(3, minmax(0,1fr))", gap: 16 }}>
+            {members.map(member => (
+              <div key={member.id} style={{ padding: 16, background: "#F8FAFC", borderRadius: 12, minHeight: 120 }}>
+                <div style={{ fontWeight: 700, marginBottom: 8 }}>{member.name}</div>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap", marginTop: 10 }}>
+                  <span style={{ fontSize: 12, color: member.status === "Active" ? COLORS.success : COLORS.danger, fontWeight: 600 }}>{member.status}</span>
+                  <span style={{ fontSize: 12, color: COLORS.muted }}>Joined {member.joined}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
