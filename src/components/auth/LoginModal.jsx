@@ -58,6 +58,7 @@ function LoginModal({ onLogin, onClose }) {
           <button
             type="button"
             onClick={() => setShowPassword(prev => !prev)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
             style={{
               position: "absolute",
               right: 16,
@@ -67,10 +68,25 @@ function LoginModal({ onLogin, onClose }) {
               color: COLORS.muted,
               cursor: "pointer",
               fontSize: 14,
-              padding: 0
+              padding: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            {showPassword ? "Hide" : "Show"}
+            {showPassword ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M3 3l18 18" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M10.58 10.58a3 3 0 0 0 4.24 4.24" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M14.12 14.12A9 9 0 0 0 21 12a9.66 9.66 0 0 0-2.27-3.05" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M9.88 9.88A9 9 0 0 0 3 12c1.2 1.35 2.8 2.54 4.53 3.34" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12z" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
           </button>
         </div>
 
