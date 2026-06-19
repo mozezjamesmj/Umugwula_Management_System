@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { COLORS, REG_FEE } from "./config/constants";
 import { seedMembers, seedLevies, seedExpenses, seedMeetings } from "./data/seedData";
 import { fmt } from "./utils/helpers";
@@ -24,12 +24,41 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [toast, setToast] = useState("");
+  const inactivityTimerRef = useRef(null);
+  const toastTimerRef = useRef(null);
+
+  const showToast = (message) => {
+    setToast(message);
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setToast(""), 3000);
+  };
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    const resetTimer = () => {
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+      if (!isAdmin) return;
+      inactivityTimerRef.current = setTimeout(() => {
+        handleLogout();
+        showToast("Logged out due to 10 minutes of inactivity.");
+      }, 10 * 60 * 1000); // 10 minutes
+    };
+
+    const events = ["mousemove", "keydown", "mousedown", "touchstart"];
+    events.forEach(event => window.addEventListener(event, resetTimer));
+    resetTimer();
+
+    return () => {
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+      events.forEach(event => window.removeEventListener(event, resetTimer));
+    };
+  }, [isAdmin]);
 
   // Listen for Auth State Changes
   useEffect(() => {
@@ -78,6 +107,10 @@ export default function App() {
     await dbService.logout();
     setIsAdmin(false);
     setTab("dashboard");
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+      inactivityTimerRef.current = null;
+    }
   };
 
   const totalCollected = levies.filter(l=>l.status==="Paid").reduce((a,l)=>a + Number(l.amount || 0), 0);
@@ -149,6 +182,11 @@ export default function App() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#F0F2F8", fontFamily: "'Inter', sans-serif" }}>
+      {toast && (
+        <div style={{ position: "fixed", top: 20, right: 20, zIndex: 999, background: COLORS.royal, color: "#fff", padding: "14px 18px", borderRadius: 12, boxShadow: "0 10px 30px rgba(0,0,0,0.12)", fontWeight: 700, fontSize: 13 }}>
+          {toast}
+        </div>
+      )}
       {/* Mobile Header */}
       {isMobile && (
         <header style={{ height: 60, background: COLORS.ink, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", position: "sticky", top: 0, zIndex: 100 }}>

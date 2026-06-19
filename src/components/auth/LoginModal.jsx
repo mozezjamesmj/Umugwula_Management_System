@@ -10,6 +10,7 @@ function LoginModal({ onLogin, onClose }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     setLoading(true);
@@ -45,13 +46,33 @@ function LoginModal({ onLogin, onClose }) {
           placeholder="admin@example.com"
         />
         
-        <Input 
-          label="Password" 
-          type="password" 
-          value={password} 
-          onChange={e => setPassword(e.target.value)} 
-          placeholder="••••••••"
-        />
+        <div style={{ position: "relative", marginBottom: 16 }}>
+          <Input 
+            label="Password" 
+            type={showPassword ? "text" : "password"} 
+            value={password} 
+            onChange={e => setPassword(e.target.value)} 
+            placeholder="••••••••"
+            style={{ paddingRight: 48 }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(prev => !prev)}
+            style={{
+              position: "absolute",
+              right: 16,
+              top: 42,
+              border: "none",
+              background: "transparent",
+              color: COLORS.muted,
+              cursor: "pointer",
+              fontSize: 14,
+              padding: 0
+            }}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
           <Btn onClick={handleLogin} style={{ flex: 1 }} disabled={loading}>
