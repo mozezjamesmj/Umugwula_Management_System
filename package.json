@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Reorganized Association Management App",
   "private": true,
+  "homepage": "https://mozezjamesmj.github.io/Umugwula_Management_System",
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
     "react": "^18.2.0",
