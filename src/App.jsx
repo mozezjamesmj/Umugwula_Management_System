@@ -65,6 +65,7 @@ export default function App() {
 
   // Listen for Auth State Changes
   useEffect(() => {
+    if (!supabase) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       setIsAdmin(!!session);
     });
