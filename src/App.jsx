@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { COLORS, LEVY_AMOUNT, REG_FEE } from "./config/constants";
-import { seedMembers, seedLevies, seedExpenses, seedMeetings } from "./data/seedData";
+import { seedMembers, seedLevies, seedExpenses, seedMeetings, seedAttendance } from "./data/seedData";
 import { fmt } from "./utils/helpers";
 import { tabs } from "./config/tabs";
 import { dbService } from "./services/dbService";
@@ -11,6 +11,7 @@ import Members from "./pages/Members";
 import Levies from "./pages/Levies";
 import Expenses from "./pages/Expenses";
 import Meetings from "./pages/Meetings";
+import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
 import LoginModal from "./components/auth/LoginModal";
 
@@ -20,6 +21,7 @@ export default function App() {
   const [levies, setLevies] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [meetings, setMeetings] = useState([]);
+  const [attendance, setAttendance] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [levyAmount, setLevyAmount] = useState(LEVY_AMOUNT);
   const [regFee, setRegFee] = useState(REG_FEE);
@@ -81,16 +83,18 @@ export default function App() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [m, l, e, mt] = await Promise.all([
+        const [m, l, e, mt, at] = await Promise.all([
           dbService.getMembers(),
           dbService.getLevies(),
           dbService.getExpenses(),
-          dbService.getMeetings()
+          dbService.getMeetings(),
+          dbService.getAttendance()
         ]);
         setMembers(m || seedMembers);
         setLevies(l || seedLevies);
         setExpenses(e || seedExpenses);
         setMeetings(mt || seedMeetings);
+        setAttendance(at || seedAttendance);
       } catch (err) {
         console.error("Data fetch error:", err);
         // If not logged in, we might get RLS errors, which is expected
@@ -99,6 +103,7 @@ export default function App() {
           setLevies(seedLevies);
           setExpenses(seedExpenses);
           setMeetings(seedMeetings);
+          setAttendance(seedAttendance);
         }
       } finally {
         setLoading(false);
@@ -179,7 +184,7 @@ export default function App() {
       </nav>
 
       <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(255,255,255,.08)", fontSize: 11, color: COLORS.muted }}>
-        n8n · Google Sheets · WhatsApp
+        Powered by 3ree6teenAutomation
       </div>
     </>
   );
@@ -228,15 +233,17 @@ export default function App() {
               {tab === "levies" && "Track monthly payments"}
               {tab === "expenses" && "Review all expenditures"}
               {tab === "meetings" && "Schedule and notify"}
+              {tab === "attendance" && "Track member attendance at meetings"}
             </div>
           </div>
 
           <div style={{ width: "100%" }}>
-            {tab === "dashboard" && <Dashboard members={members} levies={levies} expenses={expenses} isMobile={isMobile} />}
+            {tab === "dashboard" && <Dashboard members={members} levies={levies} expenses={expenses} meetings={meetings} attendance={attendance} isMobile={isMobile} />}
             {tab === "members"   && isAdmin && <Members members={members} setMembers={setMembers} levies={levies} regFee={regFee} isMobile={isMobile} />}
             {tab === "levies"    && isAdmin && <Levies members={members} levies={levies} setLevies={setLevies} levyAmount={levyAmount} isMobile={isMobile} />}
             {tab === "expenses"  && isAdmin && <Expenses expenses={expenses} setExpenses={setExpenses} isMobile={isMobile} />}
             {tab === "meetings"  && isAdmin && <Meetings meetings={meetings} setMeetings={setMeetings} members={members} isMobile={isMobile} />}
+            {tab === "attendance" && isAdmin && <Attendance meetings={meetings} members={members} attendance={attendance} setAttendance={setAttendance} ismobile={isMobile} />}
             {tab === "settings"  && isAdmin && <Settings members={members} setMembers={setMembers} levies={levies} setLevies={setLevies} levyAmount={levyAmount} setLevyAmount={setLevyAmount} regFee={regFee} setRegFee={setRegFee} ismobile={isMobile} />}
 
             {!["dashboard"].includes(tab) && !isAdmin && (

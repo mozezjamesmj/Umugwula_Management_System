@@ -4,7 +4,7 @@ import { COLORS, } from '../config/constants';
 //import { } from '../config/constants'; // remove REG_FEE if unused elsewhere
 import { fmt, monthLabel } from '../utils/helpers';
 
-function Dashboard({ members, levies, expenses, isMobile }) {
+function Dashboard({ members, levies, expenses, meetings, attendance, isMobile }) {
   const totalCollected = levies.filter(l=>l.status==="Paid").reduce((a,l)=>a + Number(l.amount || 0), 0);
   const totalExpenses = expenses.reduce((a,e)=>a + Number(e.amount || 0), 0);
   const totalRegFees = members
@@ -30,6 +30,11 @@ const maleLevyTotal = levies
 const femaleLevyTotal = levies
   .filter(l => l.status === "Paid" && femaleMemberIds.has(String(l.member_id)))
   .reduce((a, l) => a + l.amount, 0);
+
+const meetingsWithAtt = meetings.filter(m => attendance.some(a => String(a.meeting_id) === String(m.id)));
+const avgPresent = meetingsWithAtt.length
+  ? Math.round(meetingsWithAtt.reduce((sum, m) => sum + attendance.filter(a => String(a.meeting_id) === String(m.id) && a.present).length, 0) / meetingsWithAtt.length)
+  : 0;
   
   return (
       <div>
@@ -41,6 +46,7 @@ const femaleLevyTotal = levies
         <StatCard label="Unpaid This Month" value={unpaidCount} sub="Members with pending levy" color={COLORS.gold} />
         <StatCard label="Male Levy Collected" value={fmt(maleLevyTotal)} sub={`${members.filter(m=>m.gender==="Male").length} male member${members.filter(m=>m.gender==="Male").length!==1?"s":""}`} color="#1565C0" />
         <StatCard label="Female Levy Collected" value={fmt(femaleLevyTotal)} sub={`${members.filter(m=>m.gender==="Female").length} female member${members.filter(m=>m.gender==="Female").length!==1?"s":""}`} color="#AD1457" />
+        <StatCard label="Avg Meeting Attendance" value={avgPresent} sub={meetingsWithAtt.length ? `${meetingsWithAtt.length} meeting${meetingsWithAtt.length!==1?"s":""} tracked` : "No attendance tracked yet"} color="#7B1FA2" />
       </div>
  
       <div style={{ 

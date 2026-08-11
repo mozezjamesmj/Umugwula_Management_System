@@ -19,3 +19,9 @@ export const seedExpenses = [
 export const seedMeetings = [
   { id: 1, title: "Monthly General Meeting", date: "2025-07-05", time: "10:00", venue: "Community Hall", notes: "Attendance is compulsory" },
 ];
+
+export const seedAttendance = [
+  { id: 1, meeting_id: 1, member_id: 1, present: true },
+  { id: 2, meeting_id: 1, member_id: 2, present: true },
+  { id: 3, meeting_id: 1, member_id: 3, present: false },
+];

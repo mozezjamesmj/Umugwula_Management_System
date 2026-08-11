@@ -45,14 +45,26 @@ CREATE TABLE meetings (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Create Attendance Table
+CREATE TABLE attendance (
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  meeting_id BIGINT REFERENCES meetings(id) ON DELETE CASCADE,
+  member_id BIGINT REFERENCES members(id) ON DELETE CASCADE,
+  present BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE (meeting_id, member_id)
+);
+
 -- Enable Row Level Security (RLS)
 ALTER TABLE members ENABLE ROW LEVEL SECURITY;
 ALTER TABLE levies ENABLE ROW LEVEL SECURITY;
 ALTER TABLE expenses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE meetings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE attendance ENABLE ROW LEVEL SECURITY;
 
 -- Create simple policies (Allow all for now, but should be restricted in production)
 CREATE POLICY "Allow all access" ON members FOR ALL USING (true);
 CREATE POLICY "Allow all access" ON levies FOR ALL USING (true);
 CREATE POLICY "Allow all access" ON expenses FOR ALL USING (true);
 CREATE POLICY "Allow all access" ON meetings FOR ALL USING (true);
+CREATE POLICY "Allow all access" ON attendance FOR ALL USING (true);
