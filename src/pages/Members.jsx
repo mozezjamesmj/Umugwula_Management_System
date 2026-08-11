@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { COLORS, REG_FEE } from "../config/constants";
+import { COLORS } from "../config/constants";
 import {fmt, today } from "../utils/helpers";
 import Modal from "../components/ui/Modal";
 import Input from "../components/ui/Input";
@@ -8,7 +8,7 @@ import Btn from "../components/ui/Btn";
 import Badge from "../components/ui/Badge";
 import { dbService } from "../services/dbService";
 
-function Members({ members, setMembers, levies, ismobile }) {
+function Members({ members, setMembers, levies, regFee, ismobile }) {
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", gender: "Male", joined: today(), status: "Active" });
   const [toast, setToast] = useState("");
@@ -30,7 +30,7 @@ function Members({ members, setMembers, levies, ismobile }) {
     const newMemberData = {
         ...form,
         reg_fee_paid: true,
-        reg_fee_amount: REG_FEE,
+        reg_fee_amount: regFee,
         reg_fee_date: today()
       };
     const savedMember = await dbService.addMember(newMemberData);
@@ -97,7 +97,7 @@ function Members({ members, setMembers, levies, ismobile }) {
 
 
             <div style={{ background: COLORS.accent + "22", border: `1.5px solid ${COLORS.accent}`, borderRadius: 12, padding: "12px 16px", marginBottom: 20 }}>
-            <div style={{ fontWeight: 700, color: COLORS.ink, fontSize: 14 }}>📋 Registration Fee: {fmt(REG_FEE)}</div>
+            <div style={{ fontWeight: 700, color: COLORS.ink, fontSize: 14 }}>📋 Registration Fee: {fmt(regFee)}</div>
             <div style={{ fontSize: 12, color: COLORS.muted, marginTop: 4 }}>This fee is recorded as paid upon registration.</div>
           </div>
 

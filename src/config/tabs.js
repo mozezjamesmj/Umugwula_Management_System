@@ -4,4 +4,5 @@ export const tabs = [
   { key: "levies",    label: "💰 Levies",     public: false },
   { key: "expenses",  label: "📋 Expenses",   public: false },
   { key: "meetings",  label: "📅 Meetings",   public: false },
+  { key: "settings",  label: "⚙️ Settings",    public: false },
 ];

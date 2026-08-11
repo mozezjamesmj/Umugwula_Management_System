@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { COLORS, REG_FEE } from "./config/constants";
+import { COLORS, LEVY_AMOUNT, REG_FEE } from "./config/constants";
 import { seedMembers, seedLevies, seedExpenses, seedMeetings } from "./data/seedData";
 import { fmt } from "./utils/helpers";
 import { tabs } from "./config/tabs";
@@ -11,6 +11,7 @@ import Members from "./pages/Members";
 import Levies from "./pages/Levies";
 import Expenses from "./pages/Expenses";
 import Meetings from "./pages/Meetings";
+import Settings from "./pages/Settings";
 import LoginModal from "./components/auth/LoginModal";
 
 export default function App() {
@@ -20,6 +21,8 @@ export default function App() {
   const [expenses, setExpenses] = useState([]);
   const [meetings, setMeetings] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [levyAmount, setLevyAmount] = useState(LEVY_AMOUNT);
+  const [regFee, setRegFee] = useState(REG_FEE);
   const [showLogin, setShowLogin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -229,10 +232,11 @@ export default function App() {
 
           <div style={{ width: "100%" }}>
             {tab === "dashboard" && <Dashboard members={members} levies={levies} expenses={expenses} isMobile={isMobile} />}
-            {tab === "members"   && isAdmin && <Members members={members} setMembers={setMembers} levies={levies} isMobile={isMobile} />}
-            {tab === "levies"    && isAdmin && <Levies members={members} levies={levies} setLevies={setLevies} isMobile={isMobile} />}
+            {tab === "members"   && isAdmin && <Members members={members} setMembers={setMembers} levies={levies} regFee={regFee} isMobile={isMobile} />}
+            {tab === "levies"    && isAdmin && <Levies members={members} levies={levies} setLevies={setLevies} levyAmount={levyAmount} isMobile={isMobile} />}
             {tab === "expenses"  && isAdmin && <Expenses expenses={expenses} setExpenses={setExpenses} isMobile={isMobile} />}
             {tab === "meetings"  && isAdmin && <Meetings meetings={meetings} setMeetings={setMeetings} members={members} isMobile={isMobile} />}
+            {tab === "settings"  && isAdmin && <Settings members={members} setMembers={setMembers} levies={levies} setLevies={setLevies} levyAmount={levyAmount} setLevyAmount={setLevyAmount} regFee={regFee} setRegFee={setRegFee} ismobile={isMobile} />}
 
             {!["dashboard"].includes(tab) && !isAdmin && (
               <div style={{ textAlign: "center", padding: isMobile ? "40px 20px" : "80px" }}>

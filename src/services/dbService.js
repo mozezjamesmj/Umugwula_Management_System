@@ -29,6 +29,10 @@ export const dbService = {
     if (error) throw error;
     return data[0];
   },
+  async deleteMember(id) {
+    const { error } = await supabase.from('members').delete().eq('id', id);
+    if (error) throw error;
+  },
   async getLevies() {
     const { data, error } = await supabase.from('levies').select('*').order('date', { ascending: false });
     if (error) throw error;

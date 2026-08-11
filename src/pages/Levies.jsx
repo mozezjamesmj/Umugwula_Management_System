@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { COLORS, LEVY_AMOUNT } from "../config/constants";
+import { COLORS } from "../config/constants";
 //import { fmt, monthLabel, today } from "../utils/helpers";
 import Modal from "../components/ui/Modal";
 import Input from "../components/ui/Input";
@@ -9,7 +9,7 @@ import Badge from "../components/ui/Badge";
 import { dbService } from "../services/dbService";
 import { fmt, monthLabel, today, getMonthsArray } from "../utils/helpers";
 
-function Levies({ members, levies, setLevies, ismobile }) {
+function Levies({ members, levies, setLevies, levyAmount, ismobile }) {
   const [modal, setModal] = useState(false);
   const [form, setForm] = useState({ memberId: "", month: new Date().toISOString().slice(0,7), monthsCount: 1, date: today() });
   const [toast, setToast] = useState("");
@@ -47,7 +47,7 @@ function Levies({ members, levies, setLevies, ismobile }) {
         member_name: memberName,
         month,
         months_count: 1,
-        amount: LEVY_AMOUNT,
+        amount: levyAmount,
         date: form.date,
         status: "Paid"
       };
@@ -63,7 +63,7 @@ function Levies({ members, levies, setLevies, ismobile }) {
       monthsCount: 1,
       date: today()
     });
-    showToast(`✅ Levy of ${fmt(LEVY_AMOUNT * monthsToRecord.length)} recorded for ${memberName} (${monthsToRecord.length} month${monthsToRecord.length > 1 ? "s" : ""}).`);
+    showToast(`✅ Levy of ${fmt(levyAmount * monthsToRecord.length)} recorded for ${memberName} (${monthsToRecord.length} month${monthsToRecord.length > 1 ? "s" : ""}).`);
   } catch (error) {
     console.error(error);
     alert(error.message);
@@ -130,8 +130,8 @@ function Levies({ members, levies, setLevies, ismobile }) {
           <Input label="Number of Months" type="number" value={form.monthsCount} onChange={e=>setForm({...form,monthsCount:parseInt(e.target.value)})} min="1" />
           <Input label="Payment Date" type="date" value={form.date} onChange={e=>setForm({...form,date:e.target.value})} />
           <div style={{ background: COLORS.accent + "22", border: `1.5px solid ${COLORS.accent}`, borderRadius: 12, padding: "12px 16px", marginBottom: 20, marginTop: 16 }}>
-            <div style={{ fontWeight: 700, color: COLORS.ink, fontSize: 14 }}>₦{form.monthsCount * LEVY_AMOUNT} will be recorded.</div>
-            <div style={{ fontSize: 12, color: COLORS.muted, marginTop: 4 }}>This is {form.monthsCount} month(s) of levy at {fmt(LEVY_AMOUNT)}/month.</div>
+            <div style={{ fontWeight: 700, color: COLORS.ink, fontSize: 14 }}>₦{form.monthsCount * levyAmount} will be recorded.</div>
+            <div style={{ fontSize: 12, color: COLORS.muted, marginTop: 4 }}>This is {form.monthsCount} month(s) of levy at {fmt(levyAmount)}/month.</div>
           </div>
           <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
             <Btn onClick={save} style={{ flex: 1 }}>Record Levy Payment</Btn>
