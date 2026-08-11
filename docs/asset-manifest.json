@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/Umugwula_Management_System/static/js/main.5b4b29b9.js",
+    "main.js": "/Umugwula_Management_System/static/js/main.35ab3a2f.js",
     "index.html": "/Umugwula_Management_System/index.html",
-    "main.5b4b29b9.js.map": "/Umugwula_Management_System/static/js/main.5b4b29b9.js.map"
+    "main.35ab3a2f.js.map": "/Umugwula_Management_System/static/js/main.35ab3a2f.js.map"
   },
   "entrypoints": [
-    "static/js/main.5b4b29b9.js"
+    "static/js/main.35ab3a2f.js"
   ]
 }
