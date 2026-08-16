@@ -116,36 +116,7 @@ function Members({ members, setMembers, levies, regFee, isMobile }) {
       </div>
 
       {selected && (
-        <Modal title="Member Record" onClose={() => setSelected(null)}>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 20 }}>
-            <div style={{ width: 52, height: 52, borderRadius: "50%", background: COLORS.royal, color: COLORS.white, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 20, flexShrink: 0 }}>
-              {selected.name.split(" ").map(w => w[0]).slice(0, 2).join("").toUpperCase()}
-            </div>
-            <div>
-              <div style={{ fontWeight: 800, fontSize: 18, color: COLORS.ink }}>{selected.name}</div>
-              <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
-                <Badge text={selected.status} />
-                <Badge text={selected.reg_fee_paid ? "Reg Fee Paid" : "Reg Fee Unpaid"} />
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
-            {[
-              { label: "Gender", value: selected.gender || "-" },
-              { label: "Phone", value: selected.phone },
-              { label: "Email", value: selected.email || "-" },
-              { label: "Date Joined", value: selected.joined },
-              { label: "Reg Fee Amount", value: selected.reg_fee_amount ? fmt(selected.reg_fee_amount) : "-" },
-              { label: "Levy This Month", value: curMonthPaid ? "Paid" : "Unpaid" }
-            ].map(d => (
-              <div key={d.label} style={{ background: COLORS.cream, borderRadius: 10, padding: "10px 14px" }}>
-                <div style={{ fontSize: 11, color: COLORS.muted, textTransform: "uppercase", letterSpacing: .5, fontWeight: 700 }}>{d.label}</div>
-                <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.ink, marginTop: 4, wordBreak: "break-word" }}>{d.value}</div>
-              </div>
-            ))}
-          </div>
-
+        <Modal title={selected.name} onClose={() => setSelected(null)}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
             <h3 style={{ margin: 0, fontSize: 15, color: COLORS.ink }}>💰 Financial Record</h3>
             <div style={{ fontSize: 13, fontWeight: 800, color: COLORS.success }}>Total Paid: {fmt(totalPaid)}</div>
